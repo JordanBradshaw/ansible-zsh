@@ -1,0 +1,3 @@
+# host_vars/localhost.yml
+ansible_connection: local
+ansible_python_interpreter: /usr/bin/python3

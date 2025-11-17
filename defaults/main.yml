@@ -1,0 +1,25 @@
+zsh_user: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER') | default(lookup('env', 'USER')) }}"
+# zsh_user: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER') | default(ansible_env.USER, true) }}"
+# zsh_user_home: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME') | default(lookup('env', 'HOME')) }}"
+zsh_user_home: >-
+  {{
+    (
+      lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME')
+      or lookup('pipe', 'eval echo ~' + zsh_user)
+    )
+    | default(ansible_env.HOME, true)
+  }}
+
+zsh_user_config_dir: >-
+  {{ (
+      ansible_system == 'Darwin'
+        and (zsh_user_home + '/.config')
+        or (ansible_env.XDG_CONFIG_HOME | default(zsh_user_home + '/.config'))
+    ) | trim }}
+
+zsh_user_data_dir: >-
+  {{ (
+      ansible_system == 'Darwin'
+        and (zsh_user_home + '/Library/Application Support')
+        or (ansible_env.XDG_DATA_HOME | default(zsh_user_home + '/.local/share'))
+    ) | trim }}
