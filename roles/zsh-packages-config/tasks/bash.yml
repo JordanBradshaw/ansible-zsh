@@ -30,4 +30,4 @@
           . ~/.aliases
       fi
     state: present
-    when: zshrc_stat.stat.exists
+  when: zshrc_stat.stat.exists

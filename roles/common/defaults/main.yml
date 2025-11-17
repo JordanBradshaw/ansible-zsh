@@ -1,13 +1,30 @@
-zsh_user: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER') | default(ansible_env.USER, true) }}"
-# zsh_user_home: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME') | default(lookup('env', 'HOME')) }}"
+# zsh_user: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER') | default(ansible_env.USER, true) }}"
+# # zsh_user_home: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME') | default(lookup('env', 'HOME')) }}"
+# zsh_user_home: >-
+#   {{
+#     (
+#       lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME')
+#       or lookup('pipe', 'eval echo ~' + zsh_user)
+#     )
+#     | default(ansible_env.HOME, true)
+#   }}
+
+zsh_user: >-
+  {{
+    lookup('env', 'ANSIBLE_SERVICE_ZSH_USER')
+    or lookup('env', 'USER')
+    or 'root'
+  }}
+
 zsh_user_home: >-
   {{
-    (
-      lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME')
-      or lookup('pipe', 'eval echo ~' + zsh_user)
-    )
-    | default(ansible_env.HOME, true)
+    lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME')
+    or lookup('pipe', "eval echo ~" + zsh_user)
+    or lookup('env', 'HOME')
+    or '/root'
   }}
+
+
 
 zsh_user_config_dir: >-
   {{ (
