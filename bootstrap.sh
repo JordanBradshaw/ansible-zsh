@@ -5,6 +5,11 @@ VENV_DIR="${HOME}/.config/ansible-zsh/venv"
 
 have() { command -v "$1" >/dev/null 2>&1; }
 
+export PYTHONOPTIMIZE=2
+export PYTHONNOUSERSITE=1
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONHASHSEED=0
+
 # 1) Ensure Python + venv tools exist (brew on macOS, apt/dnf/etc on Linux)
 ensure_prereqs() {
   case "$(uname -s)" in
