@@ -45,7 +45,9 @@ ensure_venv
 # Use it
 ansible --version
 
-if [[ "${ANSIBLE_ZSH_TARGET,,}" == "devcontainer" ]]; then
+export ANSIBLE_ZSH_TARGET="${ANSIBLE_ZSH_TARGET:-$1}"
+
+if [[ "${ANSIBLE_ZSH_TARGET,,}" == "devcontainer*" ]]; then
     ansible-playbook site.yml --skip-tags zsh-systemd
 fi
 
