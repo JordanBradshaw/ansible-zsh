@@ -45,7 +45,8 @@ ensure_venv
 # Use it
 ansible --version
 
-export ANSIBLE_ZSH_TARGET="${ANSIBLE_ZSH_TARGET:-$1}"
+# export ANSIBLE_ZSH_TARGET="${ANSIBLE_ZSH_TARGET:-$1}"
+export ANSIBLE_ZSH_TARGET="${ANSIBLE_ZSH_TARGET:-${1:-default}}"
 if [[ -n "$REMOTE_CONTAINERS" ]]; then
     ansible-playbook site.yml --skip-tags zsh-systemd
     # Fallback for default naming convention
