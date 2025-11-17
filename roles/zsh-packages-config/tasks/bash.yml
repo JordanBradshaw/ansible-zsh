@@ -1,0 +1,27 @@
+- name: Check if target file exists
+  ansible.builtin.stat:
+    path: '{{ zsh_user_home }}/.bashrc'
+  register: bashrc_stat
+
+- name: Make bash load .aliases also
+  ansible.builtin.blockinfile:
+    path: '{{ zsh_user_home }}/.bashrc'
+    block: |
+      if [ -f ~/.aliases ]; then
+          . ~/.aliases
+      fi
+    state: present
+  # ansible.builtin.lineinfile:
+  #   path: '{{ zsh_user_home }}/.bashrc'
+  #   line: "if [ -f ~/.aliases ]; then . ~/.aliases; fi"
+  #   state: present
+  when: bashrc_stat.stat.exists
+
+- name: Make zshrc load .aliases also
+  ansible.builtin.blockinfile:
+    path: '{{ zsh_user_home }}/.zshrc'
+    block: |
+      if [ -f ~/.aliases ]; then
+          . ~/.aliases
+      fi
+    state: present

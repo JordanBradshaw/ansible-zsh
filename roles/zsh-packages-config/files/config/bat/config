@@ -1,0 +1,33 @@
+# Configuration file for bat
+# Lines starting with ‘#’ are comments.
+# Each non-comment line corresponds to a CLI flag as you’d pass it to “bat”.
+
+# --theme <theme>
+#   Sets the syntax‐highlighting theme. (See ‘bat --list-themes’.)
+--theme="TwoDark"
+
+# --style <components>
+#   Components: numbers, changes, grid, header, header-filename, header-filesize
+#   Pre-defined presets: full, default, plain, auto
+--style="numbers,changes,header"
+
+# --paging <when>
+#   When to use a pager: never, always, force, auto
+--paging="never"
+
+# --wrap <mode>
+#   How to wrap long lines: never, character, auto
+--wrap="auto"
+
+# --pager <program>
+#   Which pager to use if paging is enabled
+--pager="most"
+
+# --line-range <start>:<end>
+#   Only show this line range
+#   (You can repeat this flag multiple times.)
+# --snip-long-lines
+#   Truncate long lines instead of wrapping them
+# --decorations <when>
+#   Enable decorations: always, never, auto
+# --terminal-width <cols>

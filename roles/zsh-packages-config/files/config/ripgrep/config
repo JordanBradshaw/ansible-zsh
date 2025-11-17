@@ -1,0 +1,10 @@
+--smart-case
+--max-columns=150
+--max-columns-preview
+--colors=line:style:bold
+--colors=match:fg:green
+--colors=path:fg:blue
+--hidden
+--glob=!node_modules/*
+--glob=!.git/*
+--sort-files

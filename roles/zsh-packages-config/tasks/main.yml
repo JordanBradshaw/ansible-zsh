@@ -1,0 +1,11 @@
+# roles/myrole/tasks/main.yml
+- name: load shared defaults
+  include_vars:
+    file: "{{ role_path }}/../zsh-packages/defaults/main.yml"
+    name: ""        # (so they load at top level, not under a namespace)
+
+- name: Include configure tasks
+  ansible.builtin.include_tasks: configure.yml
+
+- name: Include bash tasks
+  ansible.builtin.include_tasks: bash.yml

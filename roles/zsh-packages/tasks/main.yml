@@ -1,0 +1,63 @@
+# roles/myrole/tasks/main.yml
+# - name: load shared defaults
+#   include_vars:
+#     file: "../../zsh/defaults/main.yml"
+#     name: ""        # (so they load at top level, not under a namespace)
+#     ignore_errors: yes
+
+
+# - name: “Expand tilde to get {{ zsh_user }}’s home directory”
+#   shell: eval echo "~{{ zsh_user }}"
+#   # args:
+#   #   warn: false
+#   register: home_lookup
+
+
+# - name: “Set zsh_user_home fact from lookup”
+#   ansible.builtin.set_fact:
+#     zsh_user_home: "{{ home_lookup.stdout }}"
+# - name: “Show resolved zsh_user_home”
+#   debug:
+#     msg: "Home directory for {{ zsh_user }} is {{ zsh_user_home }}"
+
+
+# - name: “Compute XDG_CONFIG_HOME”
+#   set_fact:
+#     xdg_config_home: >-
+#       {% if ansible_facts.env.XDG_CONFIG_HOME is defined %}
+#         {{ ansible_facts.env.XDG_CONFIG_HOME }}
+#       {% elif ansible_facts.os_family == 'Windows' %}
+#         {{ ansible_facts.env.USERPROFILE ~ '\\.config' }}
+#       {% else %}
+#         {{ zsh_user_home       ~ '/.config' }}
+#       {% endif %}
+
+# eval echo "~ansible_provisioner"
+
+# - name: “Show where we’ll store config”
+#   debug:
+#     msg: "XDG_CONFIG_HOME is {{ zsh_user_config_dir }}"
+
+
+- name: Include install tasks
+  ansible.builtin.include_tasks: install.yml
+
+# - name: Include configure tasks
+#   ansible.builtin.include_tasks: configure.yml
+
+# - name: Check if kubectl exists
+#   ansible.builtin.command: which kubectl
+#   register: kubectl_check
+#   ignore_errors: true
+
+# - name: Include kubecolor
+#   ansible.builtin.include_tasks: kubecolor.yml
+#   when: kubectl_check.rc == 0
+
+# - name: Include install fonts
+#   import_tasks: fonts.yml
+
+# - name: Include lsd tasks
+#   import_tasks: lsd.yml
+# - name: Include fd tasks
+  # import_tasks: fd.yml

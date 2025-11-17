@@ -1,0 +1,22 @@
+---
+# zsh_user: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER') | default(lookup('env', 'USER')) }}"
+# zsh_user_home: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME') | default(lookup('env', 'HOME')) }}"
+# zsh_user_config_dir: "{{ zsh_user_home }}/.config"
+# lsd_config_dir: "{{ zsh_user_home }}/.config/lsd"
+# lsd_themes_dir: "{{ lsd_config_dir }}/themes"
+
+zsh_packages:
+  - git
+  - htop
+  - ripgrep
+  - bat
+  - lsd
+  - fd-find
+  - most
+  - tldr
+  - fzf
+
+zsh_packages_overrides:
+  fd-find: fd
+
+kubecolor_version: '0.5.1'

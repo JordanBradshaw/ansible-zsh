@@ -1,0 +1,213 @@
+- name: Ensure conf directory exists
+  file:
+    path: '{{ zsh_user_config_dir }}/{{ item }}'
+    state: directory
+    owner: '{{ zsh_user }}'
+    group: '{{ zsh_user }}'
+    mode: '0755'
+    recurse: true
+  become: true
+  become_user: '{{ zsh_user }}'
+  loop:
+    - zsh/conf.d
+    - zsh/custom/themes
+
+- name: Copy zsh dot files
+  ansible.builtin.copy:
+    src: 'config/zsh/'
+    dest: '{{ zsh_user_config_dir }}/zsh'
+    owner: '{{ zsh_user }}'
+    group: '{{ zsh_user }}'
+    mode: '0644'
+  become: true
+  become_user: '{{ zsh_user }}'
+
+- name: Check if target file exists
+  ansible.builtin.stat:
+    path: '{{ zsh_user_home }}/.zshenv'
+  register: zshenv_stat
+
+# - name: Backup existing .zshenv if it exists
+#   ansible.builtin.copy:
+#     src: '{{ zsh_user_home }}/.zshenv'
+#     dest: '{{ zsh_user_home }}/.zshenv.bak'
+#     remote_src: true
+#   when: zshenv_stat.stat.exists
+
+- name: Create timestamped backup of .zshenv
+  ansible.builtin.command: >
+    cp {{ zsh_user_home }}/.zshenv {{ zsh_user_home }}/.zshenv.bak_{{ ansible_date_time.iso8601 }}
+  when: zshenv_stat.stat.exists
+# - name: Ensure ZDOTDIR is set in ~/.zshenv
+#   ansible.builtin.lineinfile:
+#     path: '{{ zsh_user_home }}/.zshenv'
+#     line: '{{ item.line }}'
+#     regexp: '{{ item.regexp }}'
+#     state: present
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     mode: '0644'
+#     create: true
+#   loop: '{{ zshenv }}'
+#   become: true
+#   become_user: '{{ zsh_user }}'
+# - name: Deploy custom .zshenv
+# ansible.builtin.copy:
+# src: 'files/.zshenv'
+# dest: '{{ zsh_user_home }}/.zshenv'
+# owner: '{{ zsh_user }}'
+# group: '{{ zsh_user }}'
+# mode: '0644'
+# become: true
+# become_user: '{{ zsh_user }}'
+# - name: Ensure Bash aliases are set in .bash_aliases
+#   ansible.builtin.lineinfile:
+#     path: '{{ zsh_user_home }}/.bash_aliases'
+#     line: '{{ item.line }}'
+#     regexp: '{{ item.regexp }}'
+#     state: present
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     create: yes
+#     mode: '0644'
+#   become: true
+#   loop: '{{ bash_aliases }}'
+
+# - name: Create ~/.aliases
+#   file:
+#     path: '{{ zsh_user_home }}/.aliases'
+#     state: touch
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     mode: '0644'
+#     create: true
+#   become: true
+
+# - name: Ensure env.d directory exists
+#   file:
+#     path: '{{ zsh_user_config_dir }}/env.d'
+#     state: directory
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     mode: '0755'
+#   loop:
+#     - env.d
+#     - zsh
+#     - zsh/conf.d
+#     - zsh/custom
+#     - zsh/custom/themes
+
+# - name: Copy environment files
+#   copy:
+#     src: 'env.d/{{ item }}'
+#     dest: '{{ zsh_user_config_dir }}/env.d/{{ item }}'
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     mode: '0600'
+#   with_items:
+#     - system.env
+#     - zsh.env
+# - name: Copy dotfiles files
+#   copy:
+#     src: 'dotfiles/{{ item }}'
+#     dest: '{{ zsh_user_config_dir }}/zsh/{{ item }}'
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     mode: '0600'
+#   with_items:
+#     - .zprofile
+#     - .zshrc
+#     - .zshenv
+#     - custom/.zsh_plugins.md
+#     - custom/themes/yupps.zsh-theme
+# - name: Copy zsh config files
+#   copy:
+#     src: 'conf.d/{{ item }}'
+#     dest: '{{ zsh_user_config_dir }}/zsh/conf.d/{{ item }}'
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     mode: '0600'
+#   with_items:
+#     - aliases.zsh
+#     - completion.zsh
+#     - iwd.zsh
+#     - unpretzo.zsh
+# - name: Copy zsh themes files
+#   copy:
+#     src: "custom/themes/{{ item }}"
+#     dest: "{{ zsh_user_config_dir }}/zsh/custom/themes/{{ item }}"
+#     owner: "{{ zsh_user }}"
+#     group: "{{ zsh_user }}"
+#     mode: '0600'
+#   with_items:
+#     - yupps.zsh-theme
+# - name: Copy env-loader
+#   copy:
+#     src: '{{ item }}'
+#     dest: '{{ zsh_user_config_dir }}/{{ item }}'
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     mode: '0600'
+#   with_items:
+#     - env-loader.sh
+#   become: true
+# - name: Copy env-loader
+#   copy:
+#     src: '{{ item }}'
+#     dest: '{{ zsh_user_config_dir }}/{{ item }}'
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     mode: '0600'
+#   with_items:
+#     - env-loader.sh
+#   become: true
+# - name: Source env files in zshrc
+#   blockinfile:
+#     path: "{{ zsh_user_home }}/.zshrc"
+#     marker: "# {mark} env.d sourcing block"
+#     block: |
+#       for envfile in ~/.config/zsh/env.d/*.env; do
+#         [ -f "$envfile" ] && source "$envfile"
+#       done
+#     create: yes
+#     owner: "{{ zsh_user }}"
+#     group: "{{ zsh_user }}"
+
+# - name: Source env-loader.sh from .bashrc
+#   ansible.builtin.lineinfile:
+#     path: '{{ zsh_user_home }}/.bashrc'
+#     line: '[ -f "$HOME/.config/env-loader.sh" ] && source "$HOME/.config/env-loader.sh"'
+#     state: present
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     create: true
+#     mode: '0644'
+#   become: true
+
+# - name: Source env-loader.sh from .zshrc
+#   ansible.builtin.lineinfile:
+#     path: '{{ zsh_user_home }}/.zshrc'
+#     line: '[ -f "$HOME/.config/env-loader.sh" ] && source "$HOME/.config/env-loader.sh"'
+#     state: present
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     create: true
+#     mode: '0644'
+#   become: true
+
+# - name: Ensure env.d directory exists
+#   file:
+#     path: '{{ zsh_user_config_dir }}/env.d'
+#     state: directory
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     mode: '0755'
+
+# - name: Ensure ZDOTDIR is set in ~/.zshenv
+#   ansible.builtin.lineinfile:
+#     path: '{{ zsh_user_home }}/.zshenv'
+#     line: 'export ZSH="$HOME/.config/.oh-my-zsh"'
+#     state: present
+#     owner: '{{ zsh_user }}'
+#     group: '{{ zsh_user }}'
+#     create: yes

@@ -1,0 +1,18 @@
+---
+- name: Print the host’s FQDN
+  debug:
+    msg: "FQDN is {{ ansible_facts['fqdn'] }}"
+
+- name: show Home dir
+  debug:
+    msg: "Home directory for {{ zsh_user }} is {{ zsh_user_home }}"
+
+- name: Ensure .config directory exists
+  file:
+    path: '{{ zsh_user_config_dir }}'
+    state: directory
+    owner: '{{ zsh_user }}'
+    group: '{{ zsh_user }}'
+    mode: '0755'
+  become: true
+  become_user: '{{ zsh_user }}'

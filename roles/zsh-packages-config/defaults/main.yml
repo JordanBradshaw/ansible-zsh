@@ -1,0 +1,43 @@
+---
+# zsh_user: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER') | default(lookup('env', 'USER')) }}"
+# zsh_user_home: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME') | default(lookup('env', 'HOME')) }}"
+# zsh_user_config_dir: "{{ zsh_user_home }}/.config"
+# lsd_config_dir: "{{ zsh_user_home }}/.config/lsd"
+# lsd_themes_dir: "{{ lsd_config_dir }}/themes"
+
+zsh_packages_overrides:
+  fd-find: fd
+
+kubecolor_version: '0.5.1'
+
+shell_aliases:
+  lsd:
+    - "alias ls='lsd --long --group-dirs first --icon always'"
+    - "alias tree='lsd --tree --depth=2'"
+  batcat:
+    - "alias cat='batcat --paging=never'"
+  fd-find:
+    - "alias fd='fdfind'"
+
+shell_exports:
+  nano:
+    - "EDITOR='nano'"
+  most:
+    - "PAGER='most'"
+    - "MANPAGER='most -s'"
+  fd-find:
+    - "FZF_DEFAULT_COMMAND='fdfind --type f'"
+    - "FZF_DEFAULT_OPTS='--height=40% --layout=reverse --border'"
+    - "FZF_CTRL_T_COMMAND='$FZF_DEFAULT_COMMAND'"
+# bash_aliases:
+
+# alias ls='lsd --long --group-dirs first --icon always'
+# alias tree='lsd --tree --depth=2'
+
+# alias cat='batcat --paging=never'
+# alias find='fdfind'
+
+# nerd_font_url: >
+#       https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Hack.zip
+# nerd_font_zip: /tmp/Hack.zip
+# user_fonts_dir: "{{ ansible_env.HOME }}/.local/share/fonts"

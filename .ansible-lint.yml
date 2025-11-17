@@ -1,0 +1,9 @@
+skip_list:
+  - experimental
+  - yaml[comments]
+  - var-naming[no-role-prefix]
+  - fqcn[action-core]
+  - name[casing]
+warn_list:
+  - no-changed-when
+  - name[missing]

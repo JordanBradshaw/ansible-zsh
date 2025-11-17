@@ -1,0 +1,41 @@
+- name: Load defaults from other_role
+  ansible.builtin.include_vars:
+    file: '{{ role_path }}/../zsh-packages/defaults/main.yml'
+    name: zsh-packages defaults
+
+- name: Debug zsh_user_config_dir
+  debug:
+    var: zsh_user_config_dir
+
+- name: Gather package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+# - name: Check packages
+#   debug:
+#     var: ansible_facts.packages
+
+- name: Copy zsh tool configs
+  include_tasks: copy-config.yml
+  loop: '{{ zsh_packages }}'
+  loop_control:
+    label: '{{ item }}'
+# - name: Copy application files
+#   copy:
+#     src: files/config/          # relative to your playbook (or role’s files/)
+#     dest: "{{ zsh_user_config_dir }}/"          # will create /etc/myapp/…
+#     owner: "{{ zsh_user }}"
+#     group: "{{ zsh_user }}"
+#     mode: '0755'
+#     force: no
+# become: true
+# - name: Ensure each export KEY=VALUE is present (replace or add)
+#   lineinfile:
+#     path: "{{ zsh_user_home }}/.aliases"
+#     create: no              # we already touched above
+#     regexp: '^export {{ item.key }}='
+#     line: 'export {{ item.key }}={{ item.value }}'
+#     backrefs: no
+#   loop: "{{ bash_aliases_exports | dict2items }}"
+#   loop_control:
+#     label: "{{ item.key }}"

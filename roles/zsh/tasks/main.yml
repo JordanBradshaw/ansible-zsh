@@ -1,0 +1,13 @@
+# roles/myrole/tasks/main.yml
+
+- name: Include install tasks
+  import_tasks: install.yml
+
+- name: Include configuration tasks
+  import_tasks: configure.yml
+
+# - name: Include oh-my-zsh tasks
+#   import_tasks: oh-my-zsh.yml
+
+- name: Include service tasks
+  import_tasks: service.yml

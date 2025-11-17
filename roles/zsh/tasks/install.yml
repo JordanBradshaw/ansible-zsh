@@ -1,0 +1,22 @@
+# roles/main_user_zsh/tasks/install.yml
+
+- name: Ensure apt cache is updated
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+  become_user: root
+
+- name: Install zsh
+  apt:
+    name: zsh
+    state: present
+  become: true
+  become_user: root
+
+- name: Install Ansible (includes ansible-pull)
+  apt:
+    name: ansible
+    state: present
+  become: true
+  become_user: root

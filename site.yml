@@ -1,0 +1,28 @@
+- hosts: localhost
+  gather_facts: true
+  roles:
+    - role: common
+      when: >
+        'common' in group_names or
+        ansible_local.get('role', {}).get('role', '') == 'common' or
+        lookup('env', 'ANSIBLE_SERVICE_COMMON') == 'true'
+      tags: [common]
+
+    - role: zsh
+      # when: >
+      #     'zsh' in group_names or
+      #     ansible_local.get('role', {}).get('role', '') == 'zsh' or
+      #     lookup('env', 'ANSIBLE_SERVICE_ZSH') == 'true'
+      tags: [zsh]
+    - role: zsh-packages
+      # when: >
+      #     'zsh-packages' in group_names or
+      #     ansible_local.get('role', {}).get('role', '') == 'zsh-packages' or
+      #     lookup('env', 'ANSIBLE_SERVICE_ZSH_PACKAGES') == 'true'
+      tags: [zsh-packages]
+    - role: zsh-packages-config
+      # when: >
+      #     'zsh-packages' in group_names or
+      #     ansible_local.get('role', {}).get('role', '') == 'zsh-packages' or
+      #     lookup('env', 'ANSIBLE_SERVICE_ZSH_PACKAGES') == 'true'
+      tags: [zsh-packages-config]

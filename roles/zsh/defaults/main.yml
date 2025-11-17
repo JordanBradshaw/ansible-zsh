@@ -1,0 +1,36 @@
+# ---
+ansible_pull_repo: "https://github.com/JordanBradshaw/ansible-zsh.git"
+ansible_pull_playbook: "site.yml"
+ansible_pull_tags: "zsh"
+
+# bash_aliases:
+#   - { line: 'alias -g G="| grep"', regexp: '^alias -g G=' }
+#   - { line: 'alias -g WC="| wc -l"', regexp: '^alias -g WC=' }
+#   - { line: 'alias -g TF="| tail -f"', regexp: '^alias -g TF=' }
+#   - { line: 'alias -g DN="/dev/null"', regexp: '^alias -g DN=' }
+
+zshenv:
+  - {
+    line: 'export ZSH="${XDG_CONFIG_HOME:-$HOME/.config}/.oh-my-zsh"',
+    regexp: '^export ZSH=' }
+  - {
+    line: 'export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"',
+    regexp: '^export ZDOTDIR=' }
+# zsh_user: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER') | default(lookup('env', 'USER')) }}"
+# # zsh_user_home: "{{ lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME') | default(lookup('env', 'HOME')) }}"
+# zsh_user_home: >-
+#   {{ 
+#     (
+#       lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME')
+#       or lookup('pipe', 'eval echo ~' + zsh_user)
+#     )
+#     | default(ansible_env.HOME + '/.config', true)
+#   }}
+
+# zsh_user_config_dir: >-
+#     {% if ansible_system == 'Darwin' %}
+#       {{ zsh_user_home }}/.config
+#     {% else %}
+#       {{ ansible_env.XDG_CONFIG_HOME
+#          | default(zsh_user_home + '/.config') }}
+#     {% endif %}

@@ -1,0 +1,122 @@
+- name: Install user‐level ansible‐pull Zsh service
+  when: ansible_system == "Linux"
+  block:
+    - name: Get UID of {{ zsh_user }}
+      ansible.builtin.command: id -u {{ zsh_user }}
+      register: zsh_user_uid
+    - name: Create systemd user dir
+      ansible.builtin.file:
+        path: '{{ zsh_user_config_dir }}/systemd/user'
+        state: directory
+        mode: '0755'
+    - name: Create ansible-zsh working dir
+      ansible.builtin.file:
+        path: '{{ zsh_user_config_dir }}/ansible-zsh'
+        state: directory
+        mode: '0755'
+    - name: Example task only if pull mode is on
+      # ansible.builtin.debug:
+      # msg: "Zsh packages also enabled"
+      set_fact:
+        ansible_pull_tags: "{{ 'zsh,zsh-packages' if lookup('env', 'ANSIBLE_SERVICE_ZSH_PACKAGES') == 'true' else 'zsh' }}"
+    - name: Example task only if pull mode is on
+      # ansible.builtin.debug:
+      # msg: "Zsh packages also enabled"
+      set_fact:
+        systemd_extra_environment: "{{ 'Environment=ANSIBLE_SERVICE_ZSH_PACKAGES=true' if lookup('env', 'ANSIBLE_SERVICE_ZSH_PACKAGES') == 'true' else '' }}"
+      # when: lookup('env', 'ANSIBLE_SERVICE_ZSH_PACKAGES') == 'true'
+      # tags: {{ ['zsh','zsh-packages'] if lookup('env', 'ANSIBLE_SERVICE_ZSH_PACKAGES') == 'true' else ['zsh'] }}
+    - name: Deploy ansible-pull-zsh.service
+      ansible.builtin.copy:
+        dest: '{{ zsh_user_config_dir }}/systemd/user/ansible-pull-zsh.service'
+        mode: '0644'
+        content: |
+          [Unit]
+          Description=Zsh Shell Provisioning with Ansible Pull
+          After=network-online.target
+          [Service]
+          Type=oneshot
+          WorkingDirectory={{ zsh_user_config_dir }}/ansible-pull-zsh
+          Environment=ANSIBLE_SERVICE_ZSH=true
+          Environment=ANSIBLE_SERVICE_ZSH_USER={{ zsh_user }}
+          {{ systemd_extra_environment }}
+          Environment="PATH={{ zsh_user_config_dir }}/ansible-pull-zsh/venv/bin:/usr/bin"
+          Environment="PYTHONUNBUFFERED=1"
+          ExecStart=/usr/bin/env ansible-pull -o -c local -i localhost -U {{ ansible_pull_repo }} {{ ansible_pull_playbook }} --tags {{ ansible_pull_tags }}
+    - name: Deploy ansible-pull-zsh.timer
+      ansible.builtin.copy:
+        dest: '{{ zsh_user_config_dir }}/systemd/user/ansible-pull-zsh.timer'
+        mode: '0644'
+        content: |
+          [Unit]
+          Description=Run Ansible Pull at login
+          [Timer]
+          OnBootSec=1min
+          OnUnitActiveSec=1h
+          Persistent=true
+          [Install]
+          WantedBy=default.target
+    - name: Enable & start ansible-zsh.service (user mode)
+      become: false
+      ansible.builtin.systemd:
+        name: 'ansible-pull-zsh.timer'
+        enabled: true
+        state: started
+        scope: user
+        daemon_reload: true
+      # shell: |
+      #   systemctl --user daemon-reload
+      #   systemctl --user enable --now ansible-zsh.service
+      # environment:
+      #   XDG_RUNTIME_DIR: "/run/user/{{ zsh_user_uid.stdout }}"
+      # args:
+      #   executable: /bin/bash
+    #────────────────────────────────────────────────────────────
+    # macOS: LaunchAgent
+    #────────────────────────────────────────────────────────────
+- name: Mac
+  when: ansible_system == "Darwin"
+  block:
+    - name: Create LaunchAgents directory
+      ansible.builtin.file:
+        path: '{{ zsh_user_home }}/Library/LaunchAgents'
+        state: directory
+        mode: '0755'
+    - name: Deploy com.example.ansible-zsh.plist
+      ansible.builtin.copy:
+        dest: '{{ zsh_user_home }}/Library/LaunchAgents/com.example.ansible-zsh.plist'
+        mode: '0644'
+        content: |
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+            "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>Label</key>
+            <string>com.example.ansible-zsh</string>
+            <key>ProgramArguments</key>
+            <array>
+              <string>/usr/local/bin/ansible-pull</string>
+              <string>-U</string>
+              <string>{{ ansible_pull_repo }}</string>
+              <string>{{ ansible_pull_playbook }}</string>
+              <string>--tags</string>
+              <string>{{ ansible_pull_tags }}</string>
+            </array>
+            <!-- run every hour -->
+            <key>StartInterval</key>
+            <integer>3600</integer>
+            <!-- pull on load (e.g. at login) -->
+            <key>RunAtLoad</key>
+            <true/>
+            <key>StandardOutPath</key>
+            <string>/tmp/ansible-pull.out.log</string>
+            <key>StandardErrorPath</key>
+            <string>/tmp/ansible-pull.err.log</string>
+          </dict>
+          </plist>
+    - name: Load (or reload) the LaunchAgent
+      become: false
+      ansible.builtin.shell: |
+        launchctl unload {{ zsh_user_home }}/Library/LaunchAgents/com.example.ansible-zsh.plist 2>/dev/null || true
+        launchctl load   {{ zsh_user_home }}/Library/LaunchAgents/com.example.ansible-zsh.plist
