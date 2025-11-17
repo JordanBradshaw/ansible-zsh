@@ -1,0 +1,8 @@
+{
+    "name": "My Dev Container",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    // This binds your local workspace into /workspaces/<folder>
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind",
+    "remoteUser": "root"
+}
