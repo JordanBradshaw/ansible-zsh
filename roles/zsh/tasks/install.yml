@@ -14,9 +14,9 @@
   become: true
   become_user: root
 
-- name: Install Ansible (includes ansible-pull)
-  apt:
-    name: ansible
-    state: present
-  become: true
-  become_user: root
+# - name: Install Ansible (includes ansible-pull)
+#   apt:
+#     name: ansible
+#     state: present
+#   become: true
+#   become_user: root
