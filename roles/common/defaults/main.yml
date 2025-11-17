@@ -13,6 +13,7 @@ zsh_user: >-
   {{
     lookup('env', 'ANSIBLE_SERVICE_ZSH_USER')
     or lookup('env', 'USER')
+    or ansible_user_id
     or 'root'
   }}
 
@@ -20,8 +21,8 @@ zsh_user_home: >-
   {{
     lookup('env', 'ANSIBLE_SERVICE_ZSH_USER_HOME')
     or lookup('pipe', "eval echo ~" + zsh_user)
-    or lookup('env', 'HOME')
-    or '/root'
+    or ansible_env.HOME
+    or "/home/" + zsh_user
   }}
 
 
