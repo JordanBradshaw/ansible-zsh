@@ -48,10 +48,10 @@ ansible --version
 export ANSIBLE_ZSH_TARGET="${ANSIBLE_ZSH_TARGET:-$1}"
 if [[ -n "$REMOTE_CONTAINERS" ]]; then
     ansible-playbook site.yml --skip-tags zsh-systemd
+    # Fallback for default naming convention
+elif [[ "${ANSIBLE_ZSH_TARGET,,}" == "devcontainer*" ]]; then
+    ansible-playbook site.yml --skip-tags zsh-systemd
 fi
-# if [[ "${ANSIBLE_ZSH_TARGET,,}" == "devcontainer*" ]]; then
-#     ansible-playbook site.yml --skip-tags zsh-systemd
-# fi
 
 
 zsh
