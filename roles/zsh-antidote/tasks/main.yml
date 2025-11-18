@@ -1,0 +1,12 @@
+# roles/myrole/tasks/main.yml
+
+- name: Ensure zsh is installed
+  ansible.builtin.package:
+    name: zsh
+    state: present
+
+- name: Swap zshenv and set new location
+  import_tasks: zshenv.yml
+
+- name: Include configuration tasks
+  import_tasks: configure.yml

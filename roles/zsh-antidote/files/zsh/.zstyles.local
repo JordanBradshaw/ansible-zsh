@@ -1,0 +1,35 @@
+# Colors
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:descriptions' format '%F{yellow}-- %d --%f'
+zstyle ':completion:*:messages'     format '%F{blue}-- %d --%f'
+zstyle ':completion:*:warnings'     format '%F{red}-- no matches --%f'
+zstyle ':completion:*' group-name ''
+
+# Menu & Navigation
+zstyle ':completion:*' menu yes select
+
+# Matching
+zstyle ':completion:*' matcher-list \
+  'm:{a-zA-Z}={A-Za-z}' \
+  'r:|[._-]=* r:|=*' \
+  'l:|=*'
+
+# Sorting & Grouping
+zstyle ':completion:*' sort false
+zstyle ':completion:*' format '%F{cyan}%B-- %d --%b%f'
+
+# Paths
+zstyle ':completion:*' ignore-parents parent pwd
+zstyle ':completion:*' accept-exact yes
+zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
+
+# Cache
+zstyle ':completion:*' use-cache yes
+zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompcache"
+
+# History-aware
+zstyle ':completion:*:complete:' rehash true
+
+# Git
+zstyle ':completion:*:*:git:*:branches' sort false
+zstyle ':completion:*:*:git:*:branches' ignored-patterns 'HEAD'
