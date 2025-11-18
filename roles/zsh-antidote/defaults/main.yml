@@ -7,9 +7,9 @@
 #   - { line: 'alias -g DN="/dev/null"', regexp: '^alias -g DN=' }
 
 zshenv:
-  - {
-    line: 'export ZSH="${XDG_CONFIG_HOME:-$HOME/.config}/.oh-my-zsh"',
-    regexp: '^export ZSH=' }
+  # - {
+  #   line: 'export ZSH="${XDG_CONFIG_HOME:-$HOME/.config}/.oh-my-zsh"',
+  #   regexp: '^export ZSH=' }
   - {
     line: 'export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"',
     regexp: '^export ZDOTDIR=' }
