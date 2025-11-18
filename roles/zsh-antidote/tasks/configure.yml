@@ -22,6 +22,11 @@
   become: true
   become_user: '{{ zsh_user }}'
 
+- name: Change shell for current user if different
+  user:
+    name: '{{ zsh_user }}'
+    shell: /bin/zsh
+  when: ansible_user_shell != "/bin/zsh"
 # - name: Check if target file exists
 #   ansible.builtin.stat:
 #     path: '{{ zsh_user_home }}/.zshenv'
