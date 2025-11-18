@@ -1,4 +1,0 @@
-ff() {
-  local file
-  file=$(fzf --preview 'bat --style=numbers --color=always {}' --height=40%) && ${EDITOR:-nvim} "$file"
-}

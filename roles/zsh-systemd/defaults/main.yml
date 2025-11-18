@@ -1,1 +1,4 @@
 ---
+ansible_pull_repo: "https://github.com/JordanBradshaw/ansible-zsh.git"
+ansible_pull_playbook: "site.yml"
+ansible_pull_tags: "zsh"

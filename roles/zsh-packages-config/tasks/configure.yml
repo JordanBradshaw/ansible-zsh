@@ -3,9 +3,9 @@
     file: '{{ role_path }}/../zsh-packages/defaults/main.yml'
     name: zsh-packages defaults
 
-- name: Debug zsh_user_config_dir
-  debug:
-    var: zsh_user_config_dir
+# - name: Debug zsh_user_config_dir
+#   debug:
+#     var: zsh_user_config_dir
 
 - name: Gather package facts
   ansible.builtin.package_facts:
@@ -39,3 +39,33 @@
 #   loop: "{{ bash_aliases_exports | dict2items }}"
 #   loop_control:
 #     label: "{{ item.key }}"
+
+- name: Add bash aliases if package is installed
+  ansible.builtin.lineinfile:
+    path: '{{ zsh_user_home }}/.aliases'
+    line: '{{ alias_entry.1 }}'
+    create: true
+    state: present
+    owner: '{{ zsh_user }}'
+    group: '{{ zsh_user }}'
+    mode: '0644'
+  loop: "{{ shell_aliases | dict2items | subelements('value') }}"
+  loop_control:
+    loop_var: alias_entry
+    label: '{{ alias_entry.1 }}'
+  when: 'alias_entry.0.key in ansible_facts.packages'
+
+- name: Add bash exports if package is installed
+  ansible.builtin.lineinfile:
+    path: '{{ zsh_user_home }}/.aliases'
+    line: 'export {{ alias_entry.1 }}'
+    create: true
+    state: present
+    owner: '{{ zsh_user }}'
+    group: '{{ zsh_user }}'
+    mode: '0644'
+  loop: "{{ shell_exports | dict2items | subelements('value') }}"
+  loop_control:
+    loop_var: alias_entry
+    label: '{{ alias_entry.1 }}'
+  when: 'alias_entry.0.key in ansible_facts.packages'

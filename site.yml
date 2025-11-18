@@ -26,3 +26,9 @@
       #     ansible_local.get('role', {}).get('role', '') == 'zsh-packages' or
       #     lookup('env', 'ANSIBLE_SERVICE_ZSH_PACKAGES') == 'true'
       tags: [zsh-packages-config]
+    - role: zsh-antidote
+      # when: >
+      #     'zsh-packages' in group_names or
+      #     ansible_local.get('role', {}).get('role', '') == 'zsh-packages' or
+      #     lookup('env', 'ANSIBLE_SERVICE_ZSH_PACKAGES') == 'true'
+      tags: [zsh-antidote]
