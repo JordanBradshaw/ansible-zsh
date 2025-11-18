@@ -30,7 +30,7 @@ zsh-users/zsh-syntax-highlighting
 
 # ─── Plugin Manager Internals / Optimizers ───────────────────────────────────
 # mattmc3/ez-compinit         # Fast compinit setup 
-mattmc3/zshrc.d             # Modular RC loader
+# mattmc3/zshrc.d             # Modular RC loader
 
 
 
