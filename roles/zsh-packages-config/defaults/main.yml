@@ -13,8 +13,8 @@ kubecolor_version: '0.5.1'
 shell_aliases:
   lsd:
     - "alias ls='lsd --long --group-dirs first --icon always'"
-    - "alias tree='lsd --tree --depth=2'"
-  batcat:
+    - "alias tree='lsd --tree --depth=4'"
+  bat:
     - "alias cat='batcat --paging=never'"
   fd-find:
     - "alias fd='fdfind'"

@@ -37,3 +37,18 @@
     loop_var: alias_entry
     label: '{{ alias_entry.1 }}'
   when: 'alias_entry.0.key in ansible_facts.packages'
+
+- name: Add bash exports if package is installed
+  ansible.builtin.lineinfile:
+    path: '{{ zsh_user_home }}/.aliases'
+    line: '{{  alias_entry.1 }}'
+    create: true
+    state: present
+    owner: '{{ zsh_user }}'
+    group: '{{ zsh_user }}'
+    mode: '0644'
+  loop: "{{ shell_exports | dict2items | subelements('value') }}"
+  loop_control:
+    loop_var: alias_entry
+    label: '{{ alias_entry.1 }}'
+  when: 'alias_entry.0.key in ansible_facts.packages'
