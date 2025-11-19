@@ -22,12 +22,19 @@
 [push]
     default = simple
     autoSetupRemote = true
+[branch]
+    sort = -committerdate
+[status]
+    short = true
+    branch = true
+    showStash = true
 [fetch]
     prune = true
     recurseSubmodules = on-demand
 [merge]
     conflictstyle = zdiff3
     stat = true
+    ff = only
 [diff]
     algorithm = patience
     renames = true
@@ -38,10 +45,21 @@
     enabled = true
 [rebase]
     autoStash = true
+[pager]
+    log = delta
+    diff = delta
+    show = delta
+    blame = delta
 [delta]
     features = line-numbers decorations
     line-numbers = true
     navigate = true
+    syntax-theme = Dracula
+    side-by-side = true
+[delta "decorations"]
+    commit-decoration-style = bold yellow box
+    file-style = bold cyan
+    file-decoration-style = none
 [interactive]
     diffFilter = delta --color-only
 [alias]
@@ -57,3 +75,8 @@
     unstage = reset HEAD --
     amend = commit --amend --no-edit
     last = log -1 HEAD
+[commit]
+    gpgSign = false
+
+[tag]
+    gpgSign = false
