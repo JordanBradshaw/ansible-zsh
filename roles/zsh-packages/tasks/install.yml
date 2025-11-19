@@ -12,6 +12,7 @@
     name: "{{ zsh_packages }}"
     state: present
     install_recommends: no
+  failed_when: false
   become: true
   when: ansible_facts['pkg_mgr'] == 'apt'
 

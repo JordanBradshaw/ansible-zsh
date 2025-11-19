@@ -34,8 +34,6 @@
     mnemonicprefix = true
     colorMoved = default
     tool = delta
-[commit]
-    gpgsign = true
 [rerere]
     enabled = true
 [rebase]

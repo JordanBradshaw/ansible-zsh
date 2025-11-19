@@ -13,8 +13,9 @@ zsh_packages:
   - lsd
   - fd-find
   - most
-  - tldr
   - fzf
+zsh_python_packages:
+  - tldr
 
 zsh_packages_overrides:
   fd-find: fd
