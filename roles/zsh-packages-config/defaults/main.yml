@@ -18,16 +18,27 @@ shell_aliases:
     - "alias cat='batcat --paging=never'"
   fd-find:
     - "alias fd='fdfind'"
+  ripgrep:
+    - "alias grep='rg'"
+# alias df='df -h'
+# alias du='dust'
 
 shell_exports:
   nano:
     - "EDITOR='nano'"
   most:
     - "PAGER='most'"
-    - "MANPAGER='most -s'"
+    # - "MANPAGER='most -s'"
+  bat:
+    - MANPAGER="sh -c 'col -bx | bat --language=man --style=plain'"
+  less:
+    - "LESS='-R'"
+    - "LESSHISTFILE='-'"
+
   fd-find:
     - "FZF_DEFAULT_COMMAND='fdfind --type f'"
     - "FZF_DEFAULT_OPTS='--height=40% --layout=reverse --border'"
+    - FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --preview 'bat --style=numbers --color=always {} | head -200'"
     - "FZF_CTRL_T_COMMAND='$FZF_DEFAULT_COMMAND'"
 # bash_aliases:
 

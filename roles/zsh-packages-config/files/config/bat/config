@@ -21,7 +21,7 @@
 
 # --pager <program>
 #   Which pager to use if paging is enabled
---pager="most"
+--pager="less"
 
 # --line-range <start>:<end>
 #   Only show this line range

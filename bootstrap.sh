@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-
+set -x
 have() { command -v "$1" >/dev/null 2>&1; }
 
 # VENV_DIR="${HOME}/.config/ansible-zsh/venv"
@@ -120,13 +120,16 @@ ansible --version
 
 # export ANSIBLE_ZSH_TARGET="${ANSIBLE_ZSH_TARGET:-$1}"
 export ANSIBLE_ZSH_TARGET="${ANSIBLE_ZSH_TARGET:-${1:-default}}"
-if [[ -n "$REMOTE_CONTAINERS" ]]; then
+if [[ -n ${REMOTE_CONTAINERS-} ]]; then
     ansible_local_env
     ansible-playbook site.yml --skip-tags zsh-systemd
     # Fallback for default naming convention
 elif [[ "${ANSIBLE_ZSH_TARGET,,}" == "devcontainer*" ]]; then
     ansible_local_env
     ansible-playbook site.yml --skip-tags zsh-systemd
+elif [[ "${ANSIBLE_ZSH_TARGET,,}" == "wsl" ]]; then
+    ansible_local_env
+    ansible-playbook site.yml --skip-tags zsh-systemd -vv -K
 fi
 
 
@@ -134,4 +137,4 @@ fi
 
 # ensure_venv
 
-zsh
+# zsh
