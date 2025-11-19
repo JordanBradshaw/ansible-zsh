@@ -16,10 +16,10 @@ zsh_packages:
   - fzf
   - delta
   - micro
-  - zoxide
-  - btm
-  - procs
-  - gdu
+  # - zoxide
+  # - btm
+  # - procs
+  # - gdu
   # - xh better curl
   # - dust better du
   # - atuin charged shell history
