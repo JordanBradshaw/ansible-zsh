@@ -26,6 +26,8 @@
   user:
     name: '{{ zsh_user }}'
     shell: /bin/zsh
+  become: true
+  failed_when: false
   when: ansible_user_shell != "/bin/zsh"
 # - name: Check if target file exists
 #   ansible.builtin.stat:

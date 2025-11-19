@@ -6,11 +6,32 @@
 # - name: Debug zsh_user_config_dir
 #   debug:
 #     var: zsh_user_config_dir
+- name: Detect devcontainer
+  set_fact:
+    is_devcontainer: >-
+      {{
+        lookup('env', 'REMOTE_CONTAINERS') == 'true' or
+        lookup('env', 'VSCODE_REMOTE_CONTAINER') is defined or
+        lookup('env', 'VSCODE_INJECTION') is defined or
+        lookup('env', 'TERM_PROGRAM') == 'vscode'
+      }}
+
+- name: Rsync a directory from control to remote, merging (no deletes)
+  ansible.builtin.copy:
+    src: config/          # path on the Ansible control node (relative to role/playbook)
+    dest: '{{ zsh_user_config_dir | trim }}/'          # directory on remote host
+    owner: '{{ zsh_user }}'
+    group: '{{ zsh_user }}'
+    mode: '0644'
+    directory_mode: "0755"
+    force: false
+  when: is_devcontainer
+
 
 - name: Gather package facts
   ansible.builtin.package_facts:
     manager: auto
-
+  
 # - name: Check packages
 #   debug:
 #     var: ansible_facts.packages
@@ -20,6 +41,7 @@
   loop: '{{ zsh_packages }}'
   loop_control:
     label: '{{ item }}'
+  when: not is_devcontainer
 # - name: Copy application files
 #   copy:
 #     src: files/config/          # relative to your playbook (or role’s files/)

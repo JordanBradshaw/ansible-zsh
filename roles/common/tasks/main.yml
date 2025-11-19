@@ -16,3 +16,18 @@
     mode: '0755'
   become: true
   become_user: '{{ zsh_user }}'
+
+- name: Improve apt parallism
+  ansible.builtin.blockinfile:
+    path: '/etc/apt/apt.conf.d/99-parallel'
+    block: |
+      APT::Acquire::Retries "3";
+      Acquire::http::Pipeline-Depth "0";
+      Acquire::https::Pipeline-Depth "0";
+      APT::Get::Max-Downloads "16";
+      APT::Install-Recommends "false";
+    state: present
+  become: true
+  failed_when: false
+  become_user: root
+  when: ansible_facts['pkg_mgr'] == 'apt'

@@ -1,0 +1,103 @@
+##### GENERAL #####
+
+# Set prefix to Ctrl-a (common modern choice); comment out to keep default
+set -g prefix C-a
+unbind C-b
+bind C-a send-prefix
+
+# True color support
+set -g default-terminal "screen-256color"
+set -ga terminal-overrides ",xterm-256color:RGB"
+
+# Start window and pane index at 1
+set -g base-index 1
+set -g pane-base-index 1
+
+# Automatically renumber windows when one is removed
+set -g renumber-windows on
+
+# Reload config quickly
+bind r source-file ~/.tmux.conf \; display-message "Config reloaded!"
+
+##### APPEARANCE #####
+
+# Better status bar colors
+set -g status-bg colour234
+set -g status-fg white
+set -g status-interval 5
+
+# Left & right status
+set -g status-left-length 50
+set -g status-left "#[fg=green]#S #[fg=cyan]|"
+
+set -g status-right-length 200
+set -g status-right "#[fg=yellow]%Y-%m-%d #[fg=green]%H:%M #[fg=blue]#(whoami)"
+
+##### NAVIGATION #####
+
+# Use vim-style pane movement
+bind -r h select-pane -L
+bind -r j select-pane -D
+bind -r k select-pane -U
+bind -r l select-pane -R
+
+# Resize panes with vim keys
+bind -r H resize-pane -L 5
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r L resize-pane -R 5
+
+# Switch windows using Alt + arrows
+bind -n M-Left previous-window
+bind -n M-Right next-window
+
+##### MOUSE #####
+
+# Enable full mouse support
+set -g mouse on
+
+##### COPY / CLIPBOARD #####
+
+# Use vim mode for copy
+setw -g mode-keys vi
+
+# Make selection automatically copy to system clipboard (macOS & Linux)
+# macOS (pbcopy)
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "pbcopy"
+
+# Linux (xclip fallback)
+if-shell "command -v xclip >/dev/null" \
+  "bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel 'xclip -selection clipboard -in'"
+
+# Linux (wl-copy for Wayland)
+if-shell "command -v wl-copy >/dev/null" \
+  "bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel 'wl-copy'"
+
+##### QUALITY OF LIFE #####
+
+# Smart pane switching (copy vim/tmux integrated behaviour)
+bind -n C-h select-pane -L
+bind -n C-j select-pane -D
+bind -n C-k select-pane -U
+bind -n C-l select-pane -R
+
+# Quickly split panes
+bind - split-window -v
+bind | split-window -h
+
+# Faster command sequences
+set-option -s escape-time 10
+
+# Increase scrollback history
+set -g history-limit 100000
+
+##### PLUGINS (OPTIONAL, with tpm) #####
+
+# List of plugins
+# set -g @plugin 'tmux-plugins/tpm'
+# set -g @plugin 'tmux-plugins/tmux-sensible'
+# set -g @plugin 'tmux-plugins/tmux-resurrect'
+# set -g @plugin 'tmux-plugins/tmux-continuum'
+
+# Run TPM
+# run '~/.tmux/plugins/tpm/tpm'
