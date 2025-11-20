@@ -1,4 +1,10 @@
 ---
+- name: Gather minimal facts for this role only
+  ansible.builtin.setup:
+    gather_subset:
+      - all
+      - env
+      
 - name: Print the host’s FQDN
   debug:
     msg: "FQDN is {{ ansible_facts['fqdn'] }}"
@@ -16,18 +22,9 @@
     mode: '0755'
   become: true
   become_user: '{{ zsh_user }}'
+- name: Include targets tasks
+  import_tasks: targets.yml
 
-- name: Improve apt parallism
-  ansible.builtin.blockinfile:
-    path: '/etc/apt/apt.conf.d/99-parallel'
-    block: |
-      APT::Acquire::Retries "3";
-      Acquire::http::Pipeline-Depth "0";
-      Acquire::https::Pipeline-Depth "0";
-      APT::Get::Max-Downloads "16";
-      APT::Install-Recommends "false";
-    state: present
-  become: true
-  failed_when: false
-  become_user: root
-  when: ansible_facts['pkg_mgr'] == 'apt'
+- name: Include apt tasks
+  import_tasks: apt.yml
+  when: has_apt 

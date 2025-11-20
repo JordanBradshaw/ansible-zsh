@@ -4,30 +4,3 @@
 # zsh_user_config_dir: "{{ zsh_user_home }}/.config"
 # lsd_config_dir: "{{ zsh_user_home }}/.config/lsd"
 # lsd_themes_dir: "{{ lsd_config_dir }}/themes"
-
-zsh_packages:
-  - git
-  - htop
-  - ripgrep
-  - bat
-  - lsd
-  - fd-find
-  - most
-  - fzf
-  - delta
-  - micro
-  # - zoxide
-  # - btm
-  # - procs
-  # - gdu
-  # - xh better curl
-  # - dust better du
-  # - atuin charged shell history
-  # - starship better fast prompt
-zsh_python_packages:
-  - tldr
-
-zsh_packages_overrides:
-  fd-find: fd
-
-kubecolor_version: '0.5.1'

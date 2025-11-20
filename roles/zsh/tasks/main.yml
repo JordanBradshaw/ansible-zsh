@@ -1,7 +1,7 @@
 # roles/myrole/tasks/main.yml
 
-- name: Include install tasks
-  import_tasks: install.yml
+# - name: Include install tasks
+#   import_tasks: install.yml
 
 # - name: Include configuration tasks
 #   import_tasks: configure.yml

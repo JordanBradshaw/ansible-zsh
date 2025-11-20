@@ -1,31 +1,21 @@
-- name: Load defaults from other_role
-  ansible.builtin.include_vars:
-    file: '{{ role_path }}/../zsh-packages/defaults/main.yml'
-    name: zsh-packages defaults
+# - name: Load defaults from other_role
+#   ansible.builtin.include_vars:
+#     file: '{{ role_path }}/../zsh-packages/defaults/main.yml'
+#     name: zsh-packages defaults
 
 # - name: Debug zsh_user_config_dir
 #   debug:
 #     var: zsh_user_config_dir
-- name: Detect devcontainer
-  set_fact:
-    is_devcontainer: >-
-      {{
-        lookup('env', 'REMOTE_CONTAINERS') == 'true' or
-        lookup('env', 'VSCODE_REMOTE_CONTAINER') is defined or
-        lookup('env', 'VSCODE_INJECTION') is defined or
-        lookup('env', 'TERM_PROGRAM') == 'vscode'
-      }}
-
 - name: Rsync a directory from control to remote, merging (no deletes)
-  ansible.builtin.copy:
-    src: config/          # path on the Ansible control node (relative to role/playbook)
-    dest: '{{ zsh_user_config_dir | trim }}/'          # directory on remote host
-    owner: '{{ zsh_user }}'
-    group: '{{ zsh_user }}'
-    mode: '0644'
-    directory_mode: "0755"
-    force: false
-  when: is_devcontainer
+  ansible.posix.synchronize:
+    src: "config/"                        # path on control node (same as before)
+    dest: "{{ zsh_user_config_dir | trim }}/"   # remote dir
+    archive: false                        # don't force owner/perms/etc
+    recursive: true
+    delete: false                         # keep extra files on remote
+    rsync_opts:
+      - "--chmod=F644,D755"               # files 0644, dirs 0755
+  delegate_to: localhost
 
 
 - name: Gather package facts
