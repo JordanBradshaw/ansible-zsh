@@ -1,8 +1,0 @@
-*.notes
-*.bak
-*.old
-*.log
-node_modules/
-dist/
-target/
-.DS_Store

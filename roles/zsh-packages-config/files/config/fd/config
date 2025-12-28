@@ -1,4 +1,0 @@
---hidden
---exclude .git
---exclude node_modules
---strip-cwd-prefix
