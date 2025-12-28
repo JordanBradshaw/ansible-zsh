@@ -1,5 +1,5 @@
 [submodule "roles/zsh-packages-config/files/config"]
-    path = roles/zsh-packages-config/files/config
+	path = roles/zsh-packages-config/files/config
     url = https://github.com/JordanBradshaw/zsh-config.git
     branch = config
 [submodule "roles/zsh-antidote/files/zsh"]
