@@ -3,6 +3,6 @@
     url = https://github.com/JordanBradshaw/zsh-config.git
     branch = config
 [submodule "roles/zsh-antidote/files/zsh"]
-    path = roles/zsh-antidote/files/zsh
+	path = roles/zsh-antidote/files/zsh
     url = https://github.com/JordanBradshaw/zsh-config.git
     branch = root
