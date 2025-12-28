@@ -20,6 +20,12 @@ shell_aliases:
     - "alias fd='fdfind'"
   ripgrep:
     - "alias grep='rg'"
+  ip:
+    - "alias ip='ip -c'"
+  journalctl:
+    - "alias journalctl='journalctl -o short-iso --no-pager'"
+  # apt:
+  #   - "alias apt='apt -o=Dpkg::Progress-Fancy=1'"
 # alias df='df -h'
 # alias du='dust'
 
