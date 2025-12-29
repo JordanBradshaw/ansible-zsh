@@ -1,0 +1,26 @@
+
+zsh_packages:
+  - git
+  - htop
+  - ripgrep
+  - bat
+  - lsd
+  - fd-find
+  - most
+  - fzf
+  - delta
+  - micro
+  - duf
+  # - zoxide
+  - btm
+  # - procs
+  # - gdu
+  # - xh better curl
+  # - dust better du
+  # - atuin charged shell history
+  # - starship better fast prompt
+zsh_python_packages:
+  - tldr
+
+zsh_packages_overrides:
+  fd-find: fd
